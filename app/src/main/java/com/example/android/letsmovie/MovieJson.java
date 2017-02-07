@@ -54,23 +54,28 @@ public class MovieJson implements Parcelable {
         }
 
         public MovieJson[] newArray(int size) {
+
             return new MovieJson[size];
         }
     };
 
     public String getMovieTitle() {
+
         return MovieTitle;
     }
 
     public String getMovieOverview() {
+
         return MovieOverview;
     }
 
     public String getUserRating() {
+
         return UserRating;
     }
 
     public String getReleaseDate() {
+
         return ReleaseDate;
     }
 
