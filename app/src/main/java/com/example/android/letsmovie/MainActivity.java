@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
 
         @Override
-        protected ArrayList<MovieJson> doInBackground(String... searchQuery) {
+        protected ArrayList<MovieJson> doInBackground(String... params) {
 
             if (isCancelled()) {
                 return null;
