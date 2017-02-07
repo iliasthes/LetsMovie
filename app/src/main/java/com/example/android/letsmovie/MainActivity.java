@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_KEY = getString(R.string.api_key);
+        API_KEY = "api_key";
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         //Progress Bar used to display loading process
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        //Constructor of GridLayoutManager with  5 or 3 columns depending on the device orientation
+        //Constructor of GridLayoutManager with  4 or 2 columns depending on the device orientation
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             layoutManager = new GridLayoutManager(this, 5);
         } else {
@@ -73,39 +73,35 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         mMovies = new ArrayList<>(20);
           mAdapter = new MoviesAdapter(mMovies );
         moviesRecyclerView.setAdapter(mAdapter);
-     //   showMoviePosters();
+        showMoviePosters();
 
     }
     @Override
     public void onStart() {
         super.onStart();
        // updateMovies();
-    //    showMoviePosters();
+        showMoviePosters();
     }
 
 
-    //  This method will get the user's preferred Movie for preview, and then tell some
-    //          background method to get the Movie data in the background.
 
+// Remember to delete if i will not use it
     private void loadMoviePosters() {
         new FetchMovieJsonData();
 
     }
 
     private void showMoviePosters() {
-        /* First, make sure the error is invisible */
+
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
-        /* Then, make sure the weather data is visible */
+
         //updateMovies();
        // loadMoviePosters();
         moviesRecyclerView.setVisibility(View.VISIBLE);
     }
 
 
-    /**
-     * Since it is okay to redundantly set the visibility of a View, we don't
-     * need to check whether each view is currently visible or invisible.
-     */
+
     private void showErrorMessage() {
         /* First, hide the currently visible data */
         moviesRecyclerView.setVisibility(View.INVISIBLE);
@@ -186,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                 URL url = new URL(builtUri.toString());
                 Log.i(LOG_TAG + "search query", builtUri.toString());
 
-                // Creates a request to TMDb, and open the connection
+                // Connecting to the Movie Database
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -195,16 +191,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                 InputStream inputStream = urlConnection.getInputStream();
                 StringBuffer buffer = new StringBuffer();
                 if (inputStream == null) {
-                    // Nothing to do.
+
                     moviesJsonStr = null;
                 }
                 reader = new BufferedReader(new InputStreamReader(inputStream));
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
+
                     buffer.append(line + "\n");
                 }
 
@@ -232,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
             Log.i("result", moviesJsonStr);
             try
             {
-                //returns the movies arrayList
+                //Gives us the movies arrayList
                 return getMovieJsonData(moviesJsonStr);
             }catch (JSONException ex){
                 Log.i(LOG_TAG, "Error in Json parsing");
@@ -246,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
             super.onPostExecute(movies);
             if(movies!=null){
 
-              //  mAdapter.clear();
+              //  mAdapter.clear(); is it really necessary;
                 mAdapter.addMovies(movies);
                 showMoviePosters();
             } else {

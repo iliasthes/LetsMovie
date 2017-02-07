@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
  */
 
 public class MovieDetails extends AppCompatActivity {
-    public static final String MOVIE_OBJECT="movie_obj";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +23,7 @@ public class MovieDetails extends AppCompatActivity {
         //get intent
         Intent intent = getIntent();
         MovieJson movie = intent.getParcelableExtra("Chosen Movie");
+
 
         ImageView moviePoster = (ImageView)findViewById(R.id.movie_poster_details);
         Picasso.with(getApplicationContext()).load(movie.getPosterPath()).into(moviePoster);
@@ -42,29 +42,9 @@ public class MovieDetails extends AppCompatActivity {
 
         setTitle(movie.getMovieTitle()); //sets the activity title as Movie name
 
-      //  getSupportActionBar().setDisplayHomeAsUpEnabled(true); //enable the back button in detail activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-   // @Override
-  //  public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-    //    getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
-   //     return true;
- //   }
 
-   // @Override
- //   public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-    //    int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-   //     if (id == R.id.action_settings) {
-    //        return true;
-   //     }
-
-    //    return super.onOptionsItemSelected(item);
- //   }
 }
 

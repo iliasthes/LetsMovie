@@ -5,7 +5,6 @@ package com.example.android.letsmovie;
  */
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
     }
     public class PosterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-     //   private static final String POSTER_KEY ="***" ;
+
         public ImageView mItemImage;
          Context mContext;
         int position;
@@ -64,30 +63,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
            Context context = v.getContext();
            MovieJson currentMovie = mMovies.get(position);
            Intent intent = new Intent(context, MovieDetails.class);
-           intent.putExtra("Chose Movie",currentMovie);
+           intent.putExtra("Chosen Movie",currentMovie);
            context.startActivity(intent);
         }
-        //        }m
-  //  }
-  //  @Override
-  //  public View getView(int position, View convertView, ViewGroup parent) {
-        //Get item for this position
-   //     Movie currentMovie = getItem(position);
-    //    PosterHolder viewHolder;
-    //    if(convertView==null){
-    //        viewHolder = new PosterHolder();
-    //        LayoutInflater inflater = LayoutInflater.from(getContext());
-    //        convertView = inflater.inflate(R.layout.movie_grid_item,parent,false);
-    //        viewHolder.moviePoster = (ImageView)convertView.findViewById(R.id.moviePoster);
-     //       convertView.setTag(viewHolder);
-    //    }else {
-    //        viewHolder = (PosterHolder) convertView.getTag();
-    //    }
-        //Populate ImageView with movie poster
 
-    //    String imagePath = currentMovie.getmPosterPath();
-    //    Picasso.with(getContext()).load(imagePath).into(viewHolder.moviePoster);
-   //     return convertView;
     }
     @Override
     public MoviesAdapter.PosterHolder onCreateViewHolder(ViewGroup parent, int viewType) {

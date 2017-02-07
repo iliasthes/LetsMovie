@@ -8,7 +8,7 @@
     <string name="sort_order_popular">popularity</string>
     <string name="sorting_rating_value">rating</string>
    <!-- <string name ="default_poster_size">w500</string> -->
-    <string name="api_key">dd416063f200188616650c00ff321d88</string>
+    <string name="api_key">Api Key</string>
     <string name="sorting_key">sorting_order_key</string>
     <array name="sorting_choices">
         <item>@string/sorting_popularity_choice</item>
