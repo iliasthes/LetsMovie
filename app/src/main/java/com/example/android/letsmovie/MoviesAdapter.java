@@ -32,10 +32,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
         void onClick(MovieJson movie);
     }
 
-    void clear() {
-        mMovies.clear();
-        notifyDataSetChanged();
-    }
+  //  void clear() {
+  //      mMovies.clear();
+  //      notifyDataSetChanged();
+  //  }
     void addMovies(ArrayList<MovieJson> movies) {
         mMovies.addAll(movies);
         notifyDataSetChanged();

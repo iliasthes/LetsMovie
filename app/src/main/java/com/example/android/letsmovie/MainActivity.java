@@ -4,8 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Image;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -20,7 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -118,11 +117,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
         MenuInflater inflater = getMenuInflater();
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.main, menu);
-        /* Return true so that the menu is displayed in the Toolbar */
         return true;
     }
 
@@ -144,25 +140,18 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     }
 
     private class FetchMovieJsonData extends AsyncTask<String, Void, ArrayList<MovieJson>> {
-        private ConnectivityManager mConnectivityManager;
+      //  private ConnectivityManager mConnectivityManager;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            // Check network connection.
-            if (isNetworkConnected() == false) {
-                // Cancel request.
-                Log.i(getClass().getName(), "Problem with internet connection");
-                Toast.makeText(getApplicationContext(), "Please Check Internet connectivity", Toast.LENGTH_SHORT).show();
-                cancel(true);
-                return;
-            }
+
             mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected ArrayList<MovieJson> doInBackground(String... searchQuery) {
-            // Stop if cancelled
+
             if (isCancelled()) {
                 return null;
             }
@@ -170,43 +159,42 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
             HttpURLConnection urlConnection = null;
             BufferedReader reader = null;
 
-            // Will contain the raw JSON response as a string.
+
             String moviesJsonStr = null;
             try {
-                final String BASE_URL = "https://api.themoviedb.org/3/authentication/token/new?"; //http://api.themoviedb.org/3/movie/
+                final String BASE_URL = "https://api.themoviedb.org/3/authentication/token/new?";
                 final String key = "api_key";
                 Uri builtUri = Uri.parse(BASE_URL).buildUpon()
-                  //      .appendPath(searchQuery[0])
                         .appendQueryParameter(key, API_KEY)
                         .build();
                 URL url = new URL(builtUri.toString());
-                Log.i(LOG_TAG + "search query", builtUri.toString());
 
-                // Connecting to the Movie Database
+                // Connecting to the Movie Database and send Get request to take the Movies Data
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
 
-                // Read the input stream into a String
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
+                // All data are readen in a string
+                InputStream inStream = urlConnection.getInputStream();
+                StringBuilder builder = new StringBuilder();
+                if (inStream == null) {
 
                     moviesJsonStr = null;
                 }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-
+                reader = new BufferedReader(new InputStreamReader(inStream));
+                //While string is not null keep reading and adding it to the builder
                 String line;
                 while ((line = reader.readLine()) != null) {
 
-                    buffer.append(line + "\n");
+                    builder.append(line + "\n");
                 }
 
-                if (buffer.length() == 0) {
-                    // Stream was empty.  No point in parsing.
+                if (builder.length() == 0) {
+                    // If builder got nothing then we don't need have to parse anything
                     moviesJsonStr = null;
                 }
-                moviesJsonStr = buffer.toString();
+                // Obligated exceptions i dont get anything!!!!!!!!! Android studio completed these
+                moviesJsonStr = builder.toString();
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error ", e);
 
@@ -219,17 +207,16 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e(LOG_TAG, "Error closing stream", e);
+                        Log.e(LOG_TAG, "Closing Stream failed", e);
                     }
                 }
             }
-            Log.i("result", moviesJsonStr);
             try
             {
                 //Gives us the movies arrayList
                 return getMovieJsonData(moviesJsonStr);
             }catch (JSONException ex){
-                Log.i(LOG_TAG, "Error in Json parsing");
+                Log.i(LOG_TAG, "We didn't made to parse MovieJson data");
                 ex.printStackTrace();
                 return null;
             }
@@ -250,44 +237,30 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
         //get movie data from JsonString
         private ArrayList<MovieJson> getMovieJsonData(String moviesJsonStr) throws JSONException{
-            final String  TAG_RESULTS = "results";
-            final String TAG_TITLE = "original_title";
-            final String TAG_OVERVIEW = "overview";
-            final String TAG_POSTER = "poster_path";
-            final String TAG_RATING ="vote_average";
-            final String TAG_RELEASE_DATE = "release_date";
+            final String  Results = "results";
+            final String Title = "original_title";
+            final String Overview = "overview";
+            final String Poster_Path = "poster_path";
+            final String Vote_Rating ="vote_average";
+            final String Release_Date = "release_date";
             ArrayList<MovieJson> movies = new ArrayList<>();
             JSONObject moviesJson = new JSONObject(moviesJsonStr);
-            JSONArray movieArray = moviesJson.getJSONArray(TAG_RESULTS);
+            JSONArray movieArray = moviesJson.getJSONArray(Results);
             MovieJson movieJson_object;
             for(int i=0; i<movieArray.length();i++){
                 JSONObject movieJsonObj = movieArray.getJSONObject(i);
-                String title = movieJsonObj.getString(TAG_TITLE);
-                String overview = movieJsonObj.getString(TAG_OVERVIEW);
-                String poster = movieJsonObj.getString(TAG_POSTER);
-                String rating = movieJsonObj.getString(TAG_RATING);
-                String releaseDate = movieJsonObj.getString(TAG_RELEASE_DATE);
+                String title = movieJsonObj.getString(Title);
+                String overview = movieJsonObj.getString(Overview);
+                String poster = movieJsonObj.getString(Poster_Path);
+                String rating = movieJsonObj.getString(Vote_Rating);
+                String releaseDate = movieJsonObj.getString(Release_Date);
                 movieJson_object = new MovieJson(title,overview,rating,releaseDate,poster);
                 movies.add(movieJson_object);
             }
             return movies;
 
         }
-        protected boolean isNetworkConnected() {
 
-            // Instantiate mConnectivityManager if necessary
-            if (mConnectivityManager == null) {
-                mConnectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
-            }
-            // Is device connected to the Internet?
-            NetworkInfo networkInfo = mConnectivityManager.getActiveNetworkInfo();
-            if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-                return true;
-            } else {
-                showErrorMessage();
-                return false;
-            }
-        }
     }
 
 

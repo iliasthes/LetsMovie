@@ -40,9 +40,8 @@ public class MovieDetails extends AppCompatActivity {
         TextView overview = (TextView)findViewById(R.id.movie_description);
         overview.setText(movie.getMovieOverview());
 
-        setTitle(movie.getMovieTitle()); //sets the activity title as Movie name
+        setTitle(movie.getMovieTitle());
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 

@@ -9,10 +9,11 @@ import android.os.Parcelable;
 
 public class MovieJson implements Parcelable {
     private String MovieTitle;
+    private String PosterPath;
     private String MovieOverview;
     private String UserRating;
     private String ReleaseDate;
-    private String PosterPath;
+
 
     public MovieJson(String originalTitle,String overview,String userRating,String releaseDate,String posterPath){
         this.MovieTitle = originalTitle;
@@ -21,7 +22,7 @@ public class MovieJson implements Parcelable {
         this.ReleaseDate = releaseDate;
         this.PosterPath = posterPath;
     }
-    //Constructor that takes a parcel and gives us a populated Movie object
+
     private MovieJson(Parcel in){
         MovieTitle = in.readString();
         MovieOverview = in.readString();
@@ -29,7 +30,8 @@ public class MovieJson implements Parcelable {
         ReleaseDate = in.readString();
         PosterPath = in.readString();
     }
-    //Methods to implement the parceable interface, for moving object across activities using intent
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -45,7 +47,7 @@ public class MovieJson implements Parcelable {
         out.writeString(PosterPath);
     }
 
-    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+
     public static final Parcelable.Creator<MovieJson> CREATOR = new Parcelable.Creator<MovieJson>() {
         public MovieJson createFromParcel(Parcel in) {
             return new MovieJson(in);
@@ -74,7 +76,7 @@ public class MovieJson implements Parcelable {
 
     public String getPosterPath() {
         final String BASE_URL = "http://image.tmdb.org/t/p/";
-        final String SIZE = "w185";
+        final String SIZE = "w500";
         return BASE_URL+SIZE+"/"+PosterPath ;
 
     }
