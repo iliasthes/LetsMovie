@@ -208,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
             String moviesJsonStr = null;
             try {
                 final String BASE_URL = "http://api.themoviedb.org/3/movie/";
-                final String key = API_KEY;
-                Uri builtUri = Uri.parse(BASE_URL + sortingOrder + "api_key=").buildUpon()
+                final String key = "api_key";
+                Uri builtUri = Uri.parse(BASE_URL + sortingOrder).buildUpon()
                         .appendQueryParameter(key, API_KEY)
                         .build();
                 URL url = new URL(builtUri.toString());

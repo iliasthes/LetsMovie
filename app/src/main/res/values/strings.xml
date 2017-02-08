@@ -4,14 +4,14 @@
     <string name="details_act">Movie Details</string>
     <string name="error_message"> An error has occurred please try later</string>
     <string name="settings_title">Sorting movies...</string>
-    <string name="sorting_popularity_choice">...Popularity</string>
-    <string name="sorting_rating_choice">...Rating</string>
+    <string name="sorting_popularity_choice">Popularity</string>
+    <string name="sorting_rating_choice">Rating</string>
     <string name="sort_order_popular">popular</string>
     <string name="sorting_rating_value">top_rated</string>
    <!-- <string name ="default_poster_size">w500</string> -->
     <string name="api_key">dd416063f200188616650c00ff321d88</string>
     <string name="sorting_key">sorting_order_key</string>
-    <string name="default_sorting">@string/sort_order_popular</string>
+    <string name="default_sorting">popular</string>
     <string name="title_activity_sorting_settings">SortingSettings</string>
     <string name="action_settings">Settings</string>
 </resources>
