@@ -34,6 +34,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.letsmovie.MainActivity" />
         </activity>
+        <activity android:name=".MovieDetails"
+            android:label="@string/details_act"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

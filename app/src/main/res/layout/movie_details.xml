@@ -6,13 +6,18 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/movie_title"
         android:layout_alignParentTop="true" />
 
-    <ImageView
+        <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/movie_poster_details"
@@ -32,6 +37,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/movie_date"/>
 
-
+        </LinearLayout>
     </ScrollView>
 </RelativeLayout>

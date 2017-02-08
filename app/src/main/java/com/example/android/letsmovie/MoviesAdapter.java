@@ -25,7 +25,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
    private ArrayList<MovieJson> mMovies;
     private Context mContext;
 //Perhaps instead of Image Arraylist i should use Movie Array list. See it later
-    public MoviesAdapter ( ArrayList<MovieJson> movies) {
+    public MoviesAdapter ( ArrayList<MovieJson> movies, Context context) {
+
+        mContext = context;
         mMovies = movies;
     }
     interface onPosterClickHandler {
@@ -44,7 +46,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
 
 
         public ImageView mItemImage;
-         Context mContext;
         int position;
 
         public PosterHolder(View v) {

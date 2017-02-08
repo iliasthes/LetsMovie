@@ -21,6 +21,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,21 +38,28 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements MoviesAdapter.onPosterClickHandler{
+public class MainActivity extends AppCompatActivity implements MoviesAdapter.onPosterClickHandler {
 
     private MoviesAdapter mAdapter;
     private RecyclerView moviesRecyclerView;
     private static String API_KEY;
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private TextView mErrorMessageDisplay;
-   private ProgressBar mLoadingIndicator;
+    private ProgressBar mLoadingIndicator;
     GridLayoutManager layoutManager;
     ArrayList<MovieJson> mMovies;
+    String sortingOrder;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_KEY = "api_key";
+        API_KEY = "dd416063f200188616650c00ff321d88";
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
@@ -58,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         //Progress Bar used to display loading process
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        //Constructor of GridLayoutManager with  4 or 2 columns depending on the device orientation
+        //Constructor of GridLayoutManager with  5 or 3 columns depending on the device orientation
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             layoutManager = new GridLayoutManager(this, 5);
         } else {
@@ -70,21 +82,29 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         //The MoviesAdapter is responsible for linking our Movies data with the Views that
         // will end up displaying on our screen.
         mMovies = new ArrayList<>(20);
-          mAdapter = new MoviesAdapter(mMovies );
+        mAdapter = new MoviesAdapter(mMovies, this);
         moviesRecyclerView.setAdapter(mAdapter);
-        showMoviePosters();
+        updateMovies();
 
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
     @Override
     public void onStart() {
-        super.onStart();
-       // updateMovies();
+        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+// See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        // updateMovies();
         showMoviePosters();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
     }
 
 
-
-// Remember to delete if i will not use it
+    // Remember to delete if i will not use it
     private void loadMoviePosters() {
         new FetchMovieJsonData();
 
@@ -95,10 +115,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
 
         //updateMovies();
-       // loadMoviePosters();
+        // loadMoviePosters();
         moviesRecyclerView.setVisibility(View.VISIBLE);
     }
-
 
 
     private void showErrorMessage() {
@@ -109,12 +128,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     }
 
 
-
     private void updateMovies() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortingOrder = pref.getString(getResources().getString(R.string.sorting_key),getResources().getString(R.string.default_sorting));
+        sortingOrder = pref.getString(getResources().getString(R.string.sorting_key), getResources().getString(R.string.default_sorting));
         new FetchMovieJsonData().execute(sortingOrder);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -139,8 +158,34 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
     }
 
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
     private class FetchMovieJsonData extends AsyncTask<String, Void, ArrayList<MovieJson>> {
-      //  private ConnectivityManager mConnectivityManager;
+        //  private ConnectivityManager mConnectivityManager;
 
         @Override
         protected void onPreExecute() {
@@ -162,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
             String moviesJsonStr = null;
             try {
-                final String BASE_URL = "https://api.themoviedb.org/3/authentication/token/new?";
-                final String key = "api_key";
-                Uri builtUri = Uri.parse(BASE_URL).buildUpon()
+                final String BASE_URL = "http://api.themoviedb.org/3/movie/";
+                final String key = API_KEY;
+                Uri builtUri = Uri.parse(BASE_URL + sortingOrder + "api_key=").buildUpon()
                         .appendQueryParameter(key, API_KEY)
                         .build();
                 URL url = new URL(builtUri.toString());
@@ -174,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
 
-                // All data are readen in a string
+                // All data are read in a string
                 InputStream inStream = urlConnection.getInputStream();
                 StringBuilder builder = new StringBuilder();
                 if (inStream == null) {
@@ -199,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                 Log.e(LOG_TAG, "Error ", e);
 
                 moviesJsonStr = null;
-            } finally{
+            } finally {
                 if (urlConnection != null) {
                     urlConnection.disconnect();
                 }
@@ -211,11 +256,14 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                     }
                 }
             }
-            try
-            {
-                //Gives us the movies arrayList
+
+            try {//Gives us the movies arrayList
                 return getMovieJsonData(moviesJsonStr);
-            }catch (JSONException ex){
+            } catch (NullPointerException ex) {
+                ex.printStackTrace();
+                return null;
+
+            } catch (JSONException ex) {
                 Log.i(LOG_TAG, "We didn't made to parse MovieJson data");
                 ex.printStackTrace();
                 return null;
@@ -225,9 +273,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         @Override
         protected void onPostExecute(ArrayList<MovieJson> movies) {
             super.onPostExecute(movies);
-            if(movies!=null){
+            if (movies != null) {
 
-              //  mAdapter.clear(); is it really necessary;
+                //  mAdapter.clear(); is it really necessary;
                 mAdapter.addMovies(movies);
                 showMoviePosters();
             } else {
@@ -236,25 +284,25 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
 
         //get movie data from JsonString
-        private ArrayList<MovieJson> getMovieJsonData(String moviesJsonStr) throws JSONException{
-            final String  Results = "results";
+        private ArrayList<MovieJson> getMovieJsonData(String moviesJsonStr) throws JSONException {
+            final String Results = "results";
             final String Title = "original_title";
             final String Overview = "overview";
             final String Poster_Path = "poster_path";
-            final String Vote_Rating ="vote_average";
+            final String Vote_Rating = "vote_average";
             final String Release_Date = "release_date";
             ArrayList<MovieJson> movies = new ArrayList<>();
             JSONObject moviesJson = new JSONObject(moviesJsonStr);
             JSONArray movieArray = moviesJson.getJSONArray(Results);
             MovieJson movieJson_object;
-            for(int i=0; i<movieArray.length();i++){
+            for (int i = 0; i < movieArray.length(); i++) {
                 JSONObject movieJsonObj = movieArray.getJSONObject(i);
                 String title = movieJsonObj.getString(Title);
                 String overview = movieJsonObj.getString(Overview);
                 String poster = movieJsonObj.getString(Poster_Path);
                 String rating = movieJsonObj.getString(Vote_Rating);
                 String releaseDate = movieJsonObj.getString(Release_Date);
-                movieJson_object = new MovieJson(title,overview,rating,releaseDate,poster);
+                movieJson_object = new MovieJson(title, overview, rating, releaseDate, poster);
                 movies.add(movieJson_object);
             }
             return movies;
@@ -262,7 +310,6 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
 
     }
-
 
 
 }
