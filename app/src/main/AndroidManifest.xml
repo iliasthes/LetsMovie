@@ -30,6 +30,10 @@
             android:label="@string/title_activity_sorting_settings"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.example.android.LetsMovie.SortingSettings"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.letsmovie.MainActivity" />

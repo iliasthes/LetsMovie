@@ -7,7 +7,9 @@ import android.media.Image;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.ListPreference;
 import android.preference.PreferenceManager;
+import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,6 +39,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+
+import static com.example.android.letsmovie.R.xml.preferences;
 
 public class MainActivity extends AppCompatActivity implements MoviesAdapter.onPosterClickHandler {
 
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
         moviesRecyclerView.setLayoutManager(layoutManager);
         moviesRecyclerView.setHasFixedSize(true);
-
+        PreferenceManager.setDefaultValues(this, preferences, false);
         //The MoviesAdapter is responsible for linking our Movies data with the Views that
         // will end up displaying on our screen.
         mMovies = new ArrayList<>(20);
@@ -130,8 +134,9 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
     private void updateMovies() {
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        sortingOrder = pref.getString(getResources().getString(R.string.sorting_key), getResources().getString(R.string.default_sorting));
-        new FetchMovieJsonData().execute(sortingOrder);
+            sortingOrder = pref.getString(SortingSettings.KEY_SORTING_ORDER, "");//(getResources().getString(R.string.sorting_key), getResources().getString(R.string.default_sorting));
+            new FetchMovieJsonData().execute(sortingOrder);
+
     }
 
     @Override
@@ -278,6 +283,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
                 //  mAdapter.clear(); is it really necessary;
                 mAdapter.addMovies(movies);
                 showMoviePosters();
+                mLoadingIndicator.setVisibility(View.INVISIBLE);
             } else {
                 showErrorMessage();
             }

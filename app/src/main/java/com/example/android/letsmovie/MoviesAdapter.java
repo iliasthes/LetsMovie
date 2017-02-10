@@ -62,7 +62,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.PosterHold
        public void onClick(View v) {
 
            Context context = v.getContext();
-           MovieJson currentMovie = mMovies.get(position);
+           MovieJson currentMovie = mMovies.get(getAdapterPosition());
            Intent intent = new Intent(context, MovieDetails.class);
            intent.putExtra("Chosen Movie",currentMovie);
            context.startActivity(intent);
