@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     GridLayoutManager layoutManager;
     ArrayList<MovieJson> mMovies;
     String sortingOrder;
+    private SharedPreferences mSharedPreferences;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_KEY = "api_key";
+        API_KEY = "dd416063f200188616650c00ff321d88";
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
         moviesRecyclerView.setLayoutManager(layoutManager);
         moviesRecyclerView.setHasFixedSize(true);
-        PreferenceManager.setDefaultValues(this, preferences, false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         //The MoviesAdapter is responsible for linking our Movies data with the Views that
         // will end up displaying on our screen.
         mMovies = new ArrayList<>(20);
@@ -96,23 +97,22 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     }
 
     @Override
-    public void onStart() {
-        super.onStart();// ATTENTION: This was auto-generated to implement the App Indexing API.
+    public void onResume() {
+        super.onResume();// ATTENTION: This was auto-generated to implement the App Indexing API.
 // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
         // updateMovies();
-        showMoviePosters();
+      //  showMoviePosters();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
+        }
 
     // Remember to delete if i will not use it
-    private void loadMoviePosters() {
-        new FetchMovieJsonData();
-
-    }
+  //  private void loadMoviePosters() {
+  //      new FetchMovieJsonData();
+///
+  //  }
 
     private void showMoviePosters() {
 
@@ -133,9 +133,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
 
     private void updateMovies() {
+
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
             sortingOrder = pref.getString(SortingSettings.KEY_SORTING_ORDER, "");//(getResources().getString(R.string.sorting_key), getResources().getString(R.string.default_sorting));
-            new FetchMovieJsonData().execute(sortingOrder);
+           mMovies.clear();
+        new FetchMovieJsonData().execute(sortingOrder);
 
     }
 
