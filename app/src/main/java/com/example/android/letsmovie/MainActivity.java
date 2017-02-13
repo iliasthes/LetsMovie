@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_KEY = "dd416063f200188616650c00ff321d88";
+        API_KEY = "api_key";
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
