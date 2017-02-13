@@ -11,24 +11,26 @@ import android.preference.PreferenceManager;
 import java.util.List;
 
 
-public class SortingSettings extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener //implements Preference.OnPreferenceChangeListener
+public class SortingSettings extends PreferenceActivity //implements SharedPreferences.OnSharedPreferenceChangeListener //implements Preference.OnPreferenceChangeListener
  {
-     public static final String KEY_SORTING_ORDER = "sorting_order_key";
-    String sortingOrderValue;
+     //public static final String KEY_SORTING_ORDER = "sorting_order_key";
+  //  String sortingOrderValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PreferenceManager.setDefaultValues(SortingSettings.this, R.xml.preferences, false);
         getFragmentManager().beginTransaction().replace(android.R.id.content, new SettingsPreferenceFragment()).commit();
+
     }
 
-     @Override
-     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-         if (key.equals(KEY_SORTING_ORDER)) {
-             Preference connectionPref = findPreference(key);
+  //   @Override
+    // public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+     //    if (key.equals(KEY_SORTING_ORDER)) {
+     //        Preference connectionPref = findPreference(key);
              // Set summary to be the user-description for the selected value
-             connectionPref.setSummary(sharedPreferences.getString(key, ""));
-         }
-     }
+     //        connectionPref.setSummary(sharedPreferences.getString(key, ""));
+     //    }
+   //  }
 
 
 

@@ -3,13 +3,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Image;
 
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
-import android.renderscript.Sampler;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,7 +19,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -53,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     GridLayoutManager layoutManager;
     ArrayList<MovieJson> mMovies;
     String sortingOrder;
-    private SharedPreferences mSharedPreferences;
+    private boolean preferencesChanged = true;
+      public SharedPreferences mSharedPreferences;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        API_KEY = "api_key";
+        API_KEY = "dd416063f200188616650c00ff321d88";
         /*
          * Using findViewById, we get a reference to our RecyclerView from xml. This allows us to
          * do things like set the adapter of the RecyclerView and toggle the visibility.
@@ -83,13 +83,15 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         }
         moviesRecyclerView.setLayoutManager(layoutManager);
         moviesRecyclerView.setHasFixedSize(true);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+      //  mSharedPreferences.edit().putString("sorting_order_key", "popular").apply();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+        PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(preferencesChangeListener);
         //The MoviesAdapter is responsible for linking our Movies data with the Views that
         // will end up displaying on our screen.
         mMovies = new ArrayList<>(20);
         mAdapter = new MoviesAdapter(mMovies, this);
         moviesRecyclerView.setAdapter(mAdapter);
-        updateMovies();
+       // updateMovies();
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -101,6 +103,10 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
         super.onResume();// ATTENTION: This was auto-generated to implement the App Indexing API.
 // See https://g.co/AppIndexing/AndroidStudio for more information.
         client.connect();
+        if (preferencesChanged) {
+        updateMovies();
+        }
+
         // updateMovies();
       //  showMoviePosters();
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -113,7 +119,12 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
   //      new FetchMovieJsonData();
 ///
   //  }
+   // @Override
+ //   public void onDestroy() {
+  //      mSharedPreferences.edit().remove(getString(R.string.sorting_key)).apply();
+  //      super.onDestroy();
 
+ //   }
     private void showMoviePosters() {
 
         mErrorMessageDisplay.setVisibility(View.INVISIBLE);
@@ -132,10 +143,11 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
     }
 
 
+
     private void updateMovies() {
 
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-            sortingOrder = pref.getString(SortingSettings.KEY_SORTING_ORDER, "");//(getResources().getString(R.string.sorting_key), getResources().getString(R.string.default_sorting));
+         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            sortingOrder = mSharedPreferences.getString(getResources().getString(R.string.sorting_key),"popular");// getResources().getString(R.string.default_sorting));//(SortingSettings.KEY_SORTING_ORDER, "");
            mMovies.clear();
         new FetchMovieJsonData().execute(sortingOrder);
 
@@ -159,6 +171,13 @@ public class MainActivity extends AppCompatActivity implements MoviesAdapter.onP
 
         return super.onOptionsItemSelected(item);
     }
+
+    private OnSharedPreferenceChangeListener preferencesChangeListener = new OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            preferencesChanged = true;
+        }
+    };
 
     @Override
     public void onClick(MovieJson movie) {

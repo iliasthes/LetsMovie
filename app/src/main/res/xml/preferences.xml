@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<ListPreference android:key="@string/sorting_key"
-    android:summary="%s"
+<ListPreference
     android:entries="@array/sorting_choices"
     android:entryValues="@array/sorting_values"
+    android:key="@string/sorting_key"
+    android:summary="Sort movie list"
+    android:persistent="true"
     android:title="@string/settings_title"
-    android:defaultValue="@string/default_sorting"/>
+    android:defaultValue="popular"/>
 </PreferenceScreen>
