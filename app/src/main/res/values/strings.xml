@@ -8,7 +8,7 @@
     <string name="sorting_rating_choice">Rating</string>
     <string name="sorting_popular_value">popular</string>
     <string name="sorting_rating_value">top_rated</string>
-    <string name="api_key">dd416063f200188616650c00ff321d88</string>
+    <string name="api_key">api_key</string>
     <string name="sorting_key">sorting_order_key</string>
     <string name="default_sorting">popular</string>
     <string name="title_activity_sorting_settings">SortingSettings</string>
