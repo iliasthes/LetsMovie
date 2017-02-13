@@ -6,7 +6,7 @@
     <string name="settings_title">Sorting movies</string>
     <string name="sorting_popularity_choice">Popularity</string>
     <string name="sorting_rating_choice">Rating</string>
-    <string name="sort_order_popular">popular</string>
+    <string name="sorting_popular_value">popular</string>
     <string name="sorting_rating_value">top_rated</string>
    <!-- <string name ="default_poster_size">w500</string> -->
     <string name="api_key">dd416063f200188616650c00ff321d88</string>
@@ -19,7 +19,7 @@
         <item>@string/sorting_rating_choice</item>
     </array>
     <array name="sorting_values">
-        <item>@string/sort_order_popular</item>
+        <item>@string/sorting_popular_value</item>
         <item>@string/sorting_rating_value</item>
     </array>
 </resources>
